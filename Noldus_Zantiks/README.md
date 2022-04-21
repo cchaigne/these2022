@@ -1,4 +1,4 @@
-detailed tutorials made for colleagues of how I processed behavioural experiments using Ethovision (parameters used to track larvae on movies, prepare files for L. Sanchou program wakefish, analyse periods and phases using Biodare and make graphs) and Zantiks
+Detailed tutorials made for colleagues of how I processed behavioural experiments using Ethovision (parameters used to track larvae on movies, prepare files for L. Sanchou program wakefish, analyse periods and phases using Biodare and make graphs) and Zantiks
 
 ## FromNoldusFileToVisualisation
 
@@ -14,4 +14,4 @@ detailed tutorials made for colleagues of how I processed behavioural experiment
 
 ## phaseshift_zantiks_example
 
-example of how to process a csv Zantiks file using R
+Example of how to process a csv Zantiks file using R
