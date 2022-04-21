@@ -1,0 +1,8 @@
+#set temperature (may take up to about 10/15min)
+
+INCLUDE zsys
+ 
+ACTION MAIN
+ SET(THERMOSTAT,28)
+ WAIT(1)
+COMPLETE

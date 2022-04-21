@@ -1,0 +1,245 @@
+# from script LD_2021_3
+# vid at light transitions + ref every hour
+# ATTENTION ERREUR PULSE DE MINUIT A DEUX HEURES DU MATIN ET PAS DE 1H A 3H // BEWARE THE PULSE OF LIGHT IS SET TO BEGIN AT MIDNIGHT AND NOT 1am
+# change the DELAY parameter to put in seconds the delay before the first light to dark transition
+# change the parameters in the LIGHTPULSE action to change the light pulse color
+
+INCLUDE ZSYS #always include
+
+DEFINE NUM_BINS_BEFORE_EVID 1650 #1650
+DEFINE NUM_BINS_AFTER_BVID 1650 #1650
+DEFINE NUM_HOURS_DAY 12 #12 nombre d'heures jour moins 2 h // number of hours of subjective day minus 2 hours
+DEFINE NUM_HOURS_NIGHT 8 #8 nombre d'heures nuit moins 2h // number of hours of subjective night minus 2 hours
+DEFINE NUM_HOURS_NIGHTUN 9 #9 nombre d'heures nuit moins 1h // number of hours of subjective night minus 1 hour
+DEFINE NUM_HOURS_BEFORELIGHT 1 #1
+DEFINE NUM_HOURS_AFTERLIGHT 5 #5
+DEFINE BIN 1
+DEFINE AUTO_REFTO 300 #300
+DEFINE T1BIS 1290 #1290
+DEFINE T1 1590 #1590
+DEFINE T2 1650 #1650
+DEFINE T3 60 #60
+DEFINE BINVID 60 #60
+DEFINE BINPULSE 3600 #3600
+DEFINE DELAY 17 550 # 18h : 17 550 ; 17h : 21 150 # delay in seconds before the first light to dark transition
+
+ACTION MAIN
+	set(tile_size,5) # These 6 SET commands are necessary for tracking
+	SET(AUTOREF_MODE,1) #used to track more than one organism
+	SET(AUTOREF_TIMEOUT,AUTO_REFTO)# Amount of time needed to wait for the autoreference image in seconds
+	SET(DETECTOR_THRESHOLD,6)
+	SET(SEARCH_DISTANCE,10)
+	SET(SEARCH_STEP,3)
+	SET(FILTER_RADIUS,3)
+	SET(MAXIMUM_TARGETS,1)
+
+	SET(COUNTER1,COUNTER_ZERO) # Sets the data output counter label to begin at 0. 
+    #The counter is used in the script below to label the data in numerical order
+	
+	LOAD(ARENAS,"arenas_96_whatman.bmp") # Loads the bitmap which indicates where the arenas are located
+#	LOAD(ARENAS,"96well.bmp") # Loads the bitmap which indicates where the arenas are located
+
+	# data output
+  	LOGCREATE("TEXT:TIME|TEXT:TEMP|TEXT:|TEXT:|TEXT:VARIABLE|TEXT:TIME_BIN|TEXT:VARIABLE")
+	LOGAPPEND("TEXT:Arena 1|TEXT:Arena 2|TEXT:Arena 3|TEXT:Arena 4|TEXT:Arena 5|TEXT:Arena 6")
+	LOGAPPEND("TEXT:Arena 7|TEXT:Arena 8|TEXT:Arena 9|TEXT:Arena 10|TEXT:Arena 11")
+	LOGAPPEND("TEXT:Arena 12|TEXT:Arena 13|TEXT:Arena 14|TEXT:Arena 15|TEXT:Arena 16")
+	LOGAPPEND("TEXT:Arena 17|TEXT:Arena 18|TEXT:Arena 19|TEXT:Arena 20|TEXT:Arena 21")
+	LOGAPPEND("TEXT:Arena 22|TEXT:Arena 23|TEXT:Arena 24|TEXT:Arena 25|TEXT:Arena 26")
+	LOGAPPEND("TEXT:Arena 27|TEXT:Arena 28|TEXT:Arena 29|TEXT:Arena 30|TEXT:Arena 31")
+	LOGAPPEND("TEXT:Arena 32|TEXT:Arena 33|TEXT:Arena 34|TEXT:Arena 35|TEXT:Arena 36")
+	LOGAPPEND("TEXT:Arena 37|TEXT:Arena 38|TEXT:Arena 39|TEXT:Arena 40|TEXT:Arena 41")
+	LOGAPPEND("TEXT:Arena 42|TEXT:Arena 43|TEXT:Arena 44|TEXT:Arena 45|TEXT:Arena 46")
+	LOGAPPEND("TEXT:Arena 47|TEXT:Arena 48|TEXT:Arena 49|TEXT:Arena 50|TEXT:Arena 51")
+	LOGAPPEND("TEXT:Arena 52|TEXT:Arena 53|TEXT:Arena 54|TEXT:Arena 55|TEXT:Arena 56")
+	LOGAPPEND("TEXT:Arena 57|TEXT:Arena 58|TEXT:Arena 59|TEXT:Arena 60|TEXT:Arena 61")
+	LOGAPPEND("TEXT:Arena 62|TEXT:Arena 63|TEXT:Arena 64|TEXT:Arena 65|TEXT:Arena 66")
+	LOGAPPEND("TEXT:Arena 67|TEXT:Arena 68|TEXT:Arena 69|TEXT:Arena 70|TEXT:Arena 71")
+   	LOGAPPEND("TEXT:Arena 72|TEXT:Arena 73|TEXT:Arena 74|TEXT:Arena 75|TEXT:Arena 76")
+    	LOGAPPEND("TEXT:Arena 77|TEXT:Arena 78|TEXT:Arena 79|TEXT:Arena 80|TEXT:Arena 81")
+   	LOGAPPEND("TEXT:Arena 82|TEXT:Arena 83|TEXT:Arena 84|TEXT:Arena 85|TEXT:Arena 86")
+	LOGAPPEND("TEXT:Arena 87|TEXT:Arena 88|TEXT:Arena 89|TEXT:Arena 90|TEXT:Arena 91")
+	LOGAPPEND("TEXT:Arena 92|TEXT:Arena 93|TEXT:Arena 94|TEXT:Arena 95|TEXT:Arena 96")
+	LOGRUN()
+
+	INVOKE(LIGHTON,1)
+	WAIT(DELAY)
+	INVOKE(LIGHTOFF,1)
+	AUTOREFERENCE(0)#300sec
+
+	INVOKE(MMSEQ_NIGHT,NUM_HOURS_NIGHT)#9h/32400s
+	INVOKE(NIGHTTODAYUN,1)#3300night+3600day
+
+	INVOKE(MMSEQ_DAY,NUM_HOURS_DAY)#13h/46800 #d1
+	INVOKE(DAYTONIGHT,1)#3600day+3600night  ### 24h
+	INVOKE(MMSEQ_NIGHT,NUM_HOURS_NIGHT)#9h/32400s #n1
+	INVOKE(NIGHTTODAY,1)#2h
+	INVOKE(MMSEQ_DAY,NUM_HOURS_DAY)#13h/46800 #d2
+
+	INVOKE(DAYTONIGHT,1)#3600day+3600night  ### 24h
+	INVOKE(MMSEQ_NIGHT,NUM_HOURS_BEFORELIGHT)#n2 before light pulse (1h)
+	INVOKE(MMSEQ_LIGHT,1)#2h
+	INVOKE(MMSEQ_NIGHT,NUM_HOURS_AFTERLIGHT)#5h
+	INVOKE(NIGHTTODAY,1)#3300night+3600day
+
+	INVOKE(MMSEQ_DAY,NUM_HOURS_DAY)#13h/46800 #d3
+	INVOKE(DAYTONIGHT,1) ### 24h
+	INVOKE(MMSEQ_NIGHT,NUM_HOURS_NIGHT)#9h/32400s #n3
+	INVOKE(NIGHTTODAY,1)#2h
+
+	INVOKE(MMSEQ_DAY,NUM_HOURS_DAY)#13h/46800 #d4
+	INVOKE(DAYTONIGHT,1) ### 24h
+	INVOKE(MMSEQ_NIGHT,NUM_HOURS_NIGHT)#9h/32400s #n4
+	INVOKE(NIGHTTODAY,1)#2h
+
+
+COMPLETE # fin main
+
+ACTION LIGHTOFF
+	SET(GPO6,0) #RED
+	SET(GPO7,0) #GREEN
+	SET(GPO8,0) #BLUE
+COMPLETE # fin lightoff
+
+ACTION LIGHTON
+	SET(GPO6,1) #RED
+	SET(GPO7,1) #GREEN
+	SET(GPO8,1) #BLUE
+COMPLETE # fin lighton
+
+ACTION LIGHTPULSE
+	SET(GPO6,1) #RED
+	SET(GPO7,1) #GREEN
+	SET(GPO8,1) #BLUE
+COMPLETE
+
+ACTION INCREMENT_COUNTER
+	SET(COUNTER1,COUNTER_INC)   
+COMPLETE
+
+
+ACTION MMSEQ_NIGHT
+	INVOKE(MMBIN_NIGHT,NUM_BINS_BEFORE_EVID)#1650
+ 	AUTOREFERENCE(0)#provides a reference image for the tracking to work from (set to 0 or 1, doesn't make a difference)#300
+	INVOKE(INCREMENT_COUNTER,AUTO_REFTO)
+   	INVOKE(MMBIN_NIGHT,NUM_BINS_AFTER_BVID)#1650
+COMPLETE
+
+ACTION MMBIN_NIGHT
+	SET(COUNTER1,COUNTER_INC)
+	LOGDATA(DATA_SNAPSHOT,"begin")#debut du tracking
+	LOGCREATE("RUNTIME|TEMPERATURE1|TEXT:|TEXT:|TEXT:NIGHT|COUNTER1")
+	LOGAPPEND("TEXT:ARENA_DISTANCES|ARENA_DISTANCES:*") # * = pour qu'il complète toutes les arènes
+	
+	WAIT(BIN)
+	
+	LOGDATA(DATA_SNAPSHOT,"end")#fin tracking
+	LOGDATA(DATA_SELECT,"begin")#pulls the data from data_snapshot "begin"
+	LOGDATA(DATA_DELTA,"end")
+    #does the calculation between the first snapshot in the series to the next one
+	LOGRUN()
+COMPLETE
+
+ACTION MMSEQ_DAY
+	INVOKE(MMBIN_DAY,NUM_BINS_BEFORE_EVID)
+ 	AUTOREFERENCE(0)#provides a reference image for the tracking to work from (set to 0 or 1, doesn't make a difference)
+	INVOKE(INCREMENT_COUNTER,AUTO_REFTO)
+   	INVOKE(MMBIN_DAY,NUM_BINS_AFTER_BVID)
+COMPLETE
+
+
+ACTION MMBIN_DAY
+	SET(COUNTER1,COUNTER_INC)
+	LOGDATA(DATA_SNAPSHOT,"begin")#debut du tracking
+	LOGCREATE("RUNTIME|TEMPERATURE1|TEXT:|TEXT:|TEXT:DAY|COUNTER1")
+	LOGAPPEND("TEXT:ARENA_DISTANCES|ARENA_DISTANCES:*") # * = pour qu'il complète toutes les arènes	
+	WAIT(BIN)	
+	LOGDATA(DATA_SNAPSHOT,"end")#fin tracking
+	LOGDATA(DATA_SELECT,"begin")#pulls the data from data_snapshot "begin"
+	LOGDATA(DATA_DELTA,"end")
+    #does the calculation between the first snapshot in the series to the next one
+	LOGRUN()
+COMPLETE#fin mmbin_ltoff
+
+ACTION NIGHTTODAYUN
+	INVOKE(MMBIN_NIGHT,T1BIS)
+	AUTOREFERENCE(0)
+	INVOKE(MMBIN_NIGHT,T2)
+	VIDEO(3600,"NIGHTTODARK")
+	INVOKE(MMBIN_NIGHT,T3)
+	INVOKE(MMBIN_DAY,T3)
+	VIDEOSTOP
+	INVOKE(MMBIN_DAY,T2)
+	AUTOREFERENCE(0)
+	INVOKE(MMBIN_DAY,T1)
+COMPLETE
+
+
+
+ACTION NIGHTTODAY
+	INVOKE(MMBIN_NIGHT,T1)
+	AUTOREFERENCE(0)
+	INVOKE(MMBIN_NIGHT,T2)
+	VIDEO(3600,"NIGHTTODAY")
+	INVOKE(MMBIN_NIGHT,T3)
+	INVOKE(MMBIN_DAY,T3)
+	VIDEOSTOP
+	INVOKE(MMBIN_DAY,T2)
+	AUTOREFERENCE(0)
+	INVOKE(MMBIN_DAY,T1)
+COMPLETE
+
+
+ACTION DAYTONIGHT
+	INVOKE(MMBIN_DAY,T1)
+	AUTOREFERENCE(0)
+	INVOKE(MMBIN_DAY,T2)
+	VIDEO(3600,"DAYTONIGHT")
+	INVOKE(MMBIN_DAY,T3)
+	INVOKE(MMBIN_NIGHT,T3)
+	VIDEOSTOP
+	INVOKE(MMBIN_NIGHT,T2)
+	AUTOREFERENCE(0)
+	INVOKE(MMBIN_NIGHT,T1)
+COMPLETE
+
+ACTION MMSEQ_LIGHT #60sec night + 60sec light + 1650 +300+1650+1650+300+1650+60 + 60off
+	VIDEO(3600,"LIGHTON")
+	INVOKE(MMBIN_NIGHT,BINVID)#60sec
+	INVOKE(LIGHTPULSE,1)
+	INVOKE(MMBIN_LIGHT,BINVID)#60
+	VIDEOSTOP
+
+	INVOKE(MMBIN_LIGHT,NUM_BINS_BEFORE_EVID)#1650
+ 	AUTOREFERENCE(0)#provides a reference image for the tracking to work from (set to 0 or 1, doesn't make a difference)#300
+	INVOKE(INCREMENT_COUNTER,AUTO_REFTO)
+   	INVOKE(MMBIN_LIGHT,NUM_BINS_AFTER_BVID)#1650
+
+
+	INVOKE(MMBIN_LIGHT,NUM_BINS_BEFORE_EVID)#1650
+ 	AUTOREFERENCE(0)#provides a reference image for the tracking to work from (set to 0 or 1, doesn't make a difference)#300
+	INVOKE(INCREMENT_COUNTER,AUTO_REFTO)
+   	INVOKE(MMBIN_LIGHT,NUM_BINS_AFTER_BVID)#1650
+
+	VIDEO(3600,"LIGHTOFF")
+	INVOKE(MMBIN_NIGHT,BINVID)#60
+	INVOKE(LIGHTOFF,1)
+	INVOKE(MMBIN_NIGHT,BINVID)#60
+	VIDEOSTOP
+	
+COMPLETE
+
+ACTION MMBIN_LIGHT
+	SET(COUNTER1,COUNTER_INC)
+	LOGDATA(DATA_SNAPSHOT,"begin")#debut du tracking
+	LOGCREATE("RUNTIME|TEMPERATURE1|TEXT:|TEXT:|TEXT:LIGHT|COUNTER1")
+	LOGAPPEND("TEXT:ARENA_DISTANCES|ARENA_DISTANCES:*") #*pour qu'il complète toutes les arènes
+	
+	WAIT(BIN)
+	
+	LOGDATA(DATA_SNAPSHOT,"end")#fin tracking
+	LOGDATA(DATA_SELECT,"begin")#pulls the data from data_snapshot "begin"
+	LOGDATA(DATA_DELTA,"end")
+    #does the calculation between the first snapshot in the series to the next one
+	LOGRUN()
+COMPLETE
