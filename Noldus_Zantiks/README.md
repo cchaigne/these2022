@@ -1,4 +1,4 @@
-R scripts available upon request
+*R scripts available upon request
 
 Detailed tutorials made for colleagues of how I processed behavioural experiments using Ethovision (parameters used to track larvae on movies, prepare files for L. Sanchou program wakefish, analyse periods and phases using Biodare and make graphs) and Zantiks
 
