@@ -4,8 +4,6 @@
 
 detailed tutorials made for colleagues of how I processed behavioural experiments using Ethovision (parameters used to track larvae on movies, prepare files for L. Sanchou program wakefish, analyse periods and phases using Biodare and make graphs) and Zantiks 
 
-*R scripts available upon request*
-
 ## manuscrit de thèse
 
 [lien sur theses.fr](http://www.theses.fr/s294467)
