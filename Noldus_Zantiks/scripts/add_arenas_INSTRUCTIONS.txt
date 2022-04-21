@@ -1,0 +1,20 @@
+Clair Chaigne may 17th 2021
+example : add_arenas_example
+
+
+----EXPLANATION-------------------------------------
+after tracking simultaneously 96 arenas, the files given by the Noldus does not contain 'Arena 1', 'Arena 2', ..., 'Arena 96' for the Arena column but instead contain '1', '2', ... '96'. For the wakefish program to work, it uses 'Arena' as a keyword to detect the Arena column. You can use the add_arenas R script to add 'Arena' from files in the 'without' folder to the 'with' folder.
+
+----STEPS-------------------------------------------
+1. empty the 'without' folder
+2. put the files to modify in the 'without' folder
+3. launch add_arenas.R (either launch each line with Ctrl+Enter or Ctrl+Alt+R to run all the lines)
+4. open each file from the 'with' folder and manually copy the Arena column in each corresponding file in the 'without' folder. Use the files in the 'without' folder to run the wakefish program.
+
+----TO CHECK IF THERE ARE ANY ISSUES----------------
+1. be sure you have the correct libraries installed in R studio : readxl and writexl (if they are not installed, an error message "aucun package nommé 'nomdelalibrairie' n'est trouvé" should appear). To install the library run this command :
+install.packages("nomdelalibrairie")
+2. be sure that number n defining the column arena is correct (3 for third column)
+3. be sure that the number m for number of arenas is correct (96 for 96 arenas)
+4. be sure the set directory is appropriate (it points to the folder which contains your file)
+5. At step 4 (when manually copying the Arena column), be sure your file is not in "MODE PROTEGE" (at the top of your excel file if there is a yellow band click on "activer la modification" at the end of the yellow band)
