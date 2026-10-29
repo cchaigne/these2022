@@ -6,11 +6,10 @@ detailed tutorials and scripts made for colleagues of how I processed behavioura
 
 ## manuscrit de thèse
 
-[lien sur theses.fr](http://www.theses.fr/s294467)
 
-Thèse, version française (à venir)
+[Lien vers le manuscrit de thèse](https://utheme.utoulouse.fr/s/fr/item/5350)
 
-Thèse, english version (to come)
+
 
 ## Publications
 
