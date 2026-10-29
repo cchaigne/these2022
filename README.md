@@ -18,3 +18,5 @@ detailed tutorials and scripts made for colleagues of how I processed behavioura
 ## Autres
 
 [MT180s "Lumière bleue sur le poisson zèbre" (25 mars 2019)](https://www.youtube.com/watch?v=e2V6eqhe0zY)
+[Bande Dessinée Science Story de Mattias Delpont](https://exploreur.univ-toulouse.fr/regarder-les-poissons-dormir-avec-clair-chaigne)
+[Article du CBI : L'absence d'yeux chez le poisson zèbre n'impacte pas son horloge circadienne](https://cbi-toulouse.fr/labsence-dyeux-chez-le-poisson-zebre-nimpacte-pas-son-horloge-biologique/)
